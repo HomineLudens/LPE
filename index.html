@@ -41,6 +41,8 @@ button.on{background:var(--acc);color:var(--accfg);font-weight:700}
 #acts>input[type=color]{flex:0 0 44px}
 #menu{position:absolute;top:8px;right:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px;display:none;flex-direction:column;min-width:190px;z-index:12;box-shadow:0 6px 24px rgba(0,0,0,.3)}
 #menu.show{display:flex}
+#vmenu{position:absolute;top:8px;right:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px;display:none;grid-template-columns:1fr 1fr;gap:2px;min-width:230px;z-index:12;box-shadow:0 6px 24px rgba(0,0,0,.3)}
+#vmenu.show{display:grid}
 .mi{text-align:left;border-radius:8px;padding:11px 12px}
 .mi:active{background:var(--line)}
 input[type=color]{width:44px;height:44px;border:1px solid var(--line);border-radius:10px;padding:3px;background:transparent;flex:none}
@@ -67,14 +69,15 @@ button:disabled{opacity:.4}
 <header>
 <h1>Editor Lowpoly</h1>
 <button class="act" id="undo" aria-label="Annulla" title="Annulla (Ctrl+Z)" style="font-size:18px" disabled>↶</button><button class="act" id="redo" aria-label="Ripeti" title="Ripeti (Ctrl+Y)" style="font-size:18px" disabled>↷</button>
-<button class="act" id="menu-btn" aria-label="Menu" style="font-size:20px">⋯</button>
+<button class="act" id="view-btn" aria-label="Vista" title="Vista"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="act" id="menu-btn" aria-label="Menu" style="font-size:20px">⋯</button>
 </header>
 <div id="view"><canvas id="c"></canvas><div id="hud"></div>
 <div class="sheet" id="sheet"></div>
+<div id="vmenu"><button class="mi" id="projbtn" style="grid-column:1/-1">Passa a ortogonale</button><button class="mi" data-v="front">Fronte</button><button class="mi" data-v="back">Retro</button><button class="mi" data-v="left">Sinistra</button><button class="mi" data-v="right">Destra</button><button class="mi" data-v="top">Alto</button><button class="mi" data-v="bottom">Basso</button><button class="mi" data-v="iso">Isometrica</button><button class="mi" data-v="init">Vista iniziale</button><button class="mi" id="frameall" style="grid-column:1/-1">Inquadra tutto</button></div>
 <div id="menu"><button class="mi" id="proj-btn">Progetti…</button><button class="mi" id="exp-btn">Esporta OBJ</button><button class="mi" id="glb-btn" hidden>Esporta GLB (zip)</button><button class="mi" id="helpbtn">Comandi e aiuto</button></div>
 <div id="exp"><textarea id="objtxt" readonly></textarea><div class="row"><button class="act on" id="copy">Copia testo</button><button class="act" id="dlobj" hidden>Scarica .obj</button><button class="act" id="closeexp">Chiudi</button></div></div>
 <div id="proj"><div class="row"><input id="pname" placeholder="Nome progetto" maxlength="40"><button class="act on" id="psave">Salva</button></div><div id="plist"></div><div class="row"><button class="act" id="pnew">Nuovo da zero</button><button class="act" id="pclose">Chiudi</button></div></div>
-<div id="help"><div id="hbody"><h3>MOUSE</h3><p><b>Trascina</b>orbita</p><p><b>Centrale / Spazio</b>tieni premuto e trascina: sposta la vista</p><p><b>Destro / Maiusc</b>trascina: sposta la vista</p><p><b>Rotella</b>zoom</p><p><b>Doppio clic / Ctrl+clic</b>aggiungi o togli dalla selezione</p><p><b>Tieni premuto</b>facce complanari</p><p><b>Doppio clic</b>su un oggetto: vertice o faccia sotto il dito entra nella modalità relativa · nel vuoto: esci</p><h3>TASTIERA</h3><p><b>1 2 3</b>Oggetto, Facce, Vertici</p><p><b>W E R</b>Sposta, Ruota, Scala</p><p><b>Frecce</b>orbita</p><p><b>+ / -</b>zoom</p><p><b>F</b>centra sulla selezione</p><p><b>Ctrl+A</b>seleziona tutto (vertici/facce)</p><p><b>Esc</b>deseleziona o chiudi</p><p><b>Canc</b>elimina</p><p><b>Ctrl+D</b>duplica</p><p><b>Ctrl+Z</b>annulla</p><p><b>Ctrl+Y</b>ripeti (anche Ctrl+Maiusc+Z)</p><p><b>Ctrl+S</b>salva il progetto</p><p><b>Maiusc+A</b>aggiungi forma</p><p><b>P</b>appiattisci le facce</p><p><b>X</b>estrudi le facce</p><p><b>S</b>segmenta (vertice al centro)</p><p><b>K</b>tassella i vertici selezionati</p><p><b>M</b>selezione multipla</p><p><b>T</b>snap on/off</p><p><b>H o ?</b>questo aiuto</p></div><div class="row"><button class="act on" id="hclose">Chiudi</button></div></div>
+<div id="help"><div id="hbody"><h3>MOUSE</h3><p><b>Trascina</b>orbita</p><p><b>Centrale / Spazio</b>tieni premuto e trascina: sposta la vista</p><p><b>Destro / Maiusc</b>trascina: sposta la vista</p><p><b>Rotella</b>zoom</p><p><b>Doppio clic / Ctrl+clic</b>aggiungi o togli dalla selezione</p><p><b>Tieni premuto</b>su un oggetto: aggiungi o togli dalla selezione · su una faccia: facce complanari</p><p><b>Doppio clic</b>su un oggetto: vertice o faccia sotto il dito entra nella modalità relativa · nel vuoto: esci</p><h3>TASTIERA</h3><p><b>1 2 3</b>Oggetto, Facce, Vertici</p><p><b>W E R</b>Sposta, Ruota, Scala</p><p><b>Frecce</b>orbita</p><p><b>+ / -</b>zoom</p><p><b>F</b>centra sulla selezione</p><p><b>Numpad 1 / 3 / 7</b>vista fronte, destra, alto (con Ctrl: opposta)</p><p><b>Numpad 5</b>ortogonale o prospettiva</p><p><b>Ctrl+A</b>seleziona tutto</p><p><b>L</b>allinea gli oggetti</p><p><b>Esc</b>deseleziona o chiudi</p><p><b>Canc</b>elimina</p><p><b>Ctrl+D</b>duplica</p><p><b>Ctrl+Z</b>annulla</p><p><b>Ctrl+Y</b>ripeti (anche Ctrl+Maiusc+Z)</p><p><b>Ctrl+S</b>salva il progetto</p><p><b>Maiusc+A</b>aggiungi forma</p><p><b>P</b>appiattisci le facce</p><p><b>X</b>estrudi le facce</p><p><b>S</b>segmenta (vertice al centro)</p><p><b>K</b>tassella i vertici selezionati</p><p><b>M</b>selezione multipla</p><p><b>T</b>snap on/off</p><p><b>H o ?</b>questo aiuto</p></div><div class="row"><button class="act on" id="hclose">Chiudi</button></div></div>
 </div>
 <footer>
 <div class="row">
@@ -83,7 +86,7 @@ button:disabled{opacity:.4}
 </div>
 <div id="acts">
 <button class="act" id="add">+ Forma</button><button class="act" id="ext" hidden>Estrudi</button><button class="act" id="seg" hidden>Segmenta</button><button class="act" id="tess" hidden>Tassella</button>
-<button class="act" id="dup">Duplica</button>
+<button class="act" id="dup">Duplica</button><button class="act" id="align" hidden>Allinea</button>
 <button class="act" id="del">Elimina</button>
 <button class="act" id="flat" disabled>Appiattisci</button>
 <button class="act" id="multi">Multi</button>
@@ -104,7 +107,7 @@ const V3=THREE.Vector3,$=id=>document.getElementById(id);
 const cv=$("c"),view=$("view");
 const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true});
 const DPR=Math.min(window.devicePixelRatio||1,2);renderer.setPixelRatio(DPR);
-const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(50,1,.1,200);
+const scene=new THREE.Scene(),persp=new THREE.PerspectiveCamera(50,1,.1,200),ortho=new THREE.OrthographicCamera(-1,1,1,-1,.1,400);let camera=persp;
 scene.add(new THREE.HemisphereLight(0xffffff,0x556070,.75));
 const dl=new THREE.DirectionalLight(0xffffff,.8);dl.position.set(4,8,5);scene.add(dl);
 let grid;
@@ -116,10 +119,11 @@ function themeScene(){
 let dirty=true;
 // camera orbitale
 let az=.8,el=.55,dist=7,target=new V3(0,.5,0);
-function updCam(){camera.position.set(target.x+dist*Math.cos(el)*Math.sin(az),target.y+dist*Math.sin(el),target.z+dist*Math.cos(el)*Math.cos(az));camera.lookAt(target);camera.updateMatrixWorld();dirty=true}
-function resize(){const w=view.clientWidth,h=view.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();dirty=true}
+function updCam(){camera.position.set(target.x+dist*Math.cos(el)*Math.sin(az),target.y+dist*Math.sin(el),target.z+dist*Math.cos(el)*Math.cos(az));camera.lookAt(target);if(camera===ortho)fitOrtho();camera.updateMatrixWorld();dirty=true}
+function fitOrtho(){const a=view.clientWidth/(view.clientHeight||1),h=dist*.4663;ortho.left=-h*a;ortho.right=h*a;ortho.top=h;ortho.bottom=-h;ortho.updateProjectionMatrix()}
+function resize(){const w=view.clientWidth,h=view.clientHeight;renderer.setSize(w,h,false);persp.aspect=w/h;persp.updateProjectionMatrix();fitOrtho();dirty=true}
 // dati
-const objs=[];let selObj=null,mode="obj",tool="move",selV=new Set(),selF=new Set(),multi=false,snap=true;
+const objs=[];let selObj=null,mode="obj",tool="move",selV=new Set(),selF=new Set(),selSet=new Set(),multi=false,snap=true;
 function fromGeo(g){if(g.index)g=g.toNonIndexed();const p=g.attributes.position,map={},verts=[],faces=[];
  for(let i=0;i<p.count;i+=3){const t=[];for(let k=0;k<3;k++){const x=p.getX(i+k),y=p.getY(i+k),z=p.getZ(i+k),key=[x,y,z].map(n=>Math.round(n*1000)).join();
  if(!(key in map)){map[key]=verts.length;verts.push(new V3(x,y,z))}t.push(map[key])}
@@ -134,7 +138,7 @@ function rebuild(o){const pos=[];o.faces.forEach(f=>f.forEach(i=>pos.push(o.vert
  o.mesh.geometry.dispose();o.mesh.geometry=g;if(o===selObj)overlay();dirty=true}
 // overlay per l'oggetto selezionato
 let ov=null;
-function clearOv(){if(ov){ov.parent&&ov.parent.remove(ov);ov.traverse(c=>{c.geometry&&c.geometry.dispose()});ov=null}}
+var ovs=[];function clearOv(){if(ov){ov.parent&&ov.parent.remove(ov);ov.traverse(c=>{c.geometry&&c.geometry.dispose()});ov=null}ovs.forEach(g=>{g.parent&&g.parent.remove(g);g.geometry.dispose()});ovs=[]}
 function overlay(){clearOv();if(!selObj)return;const o=selObj;ov=new THREE.Group();
  const seen=new Set(),L=[];o.faces.forEach(f=>{for(let k=0;k<3;k++){const a=f[k],b=f[(k+1)%3],key=a<b?a+"_"+b:b+"_"+a;if(!seen.has(key)){seen.add(key);L.push(o.verts[a],o.verts[b])}}});
  ov.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(L),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.55})));
@@ -145,6 +149,7 @@ function overlay(){clearOv();if(!selObj)return;const o=selObj;ov=new THREE.Group
   const all=[],sel=[];o.verts.forEach((v,i)=>(selV.has(i)?sel:all).push(v));
   const a=new THREE.Points(new THREE.BufferGeometry().setFromPoints(all),pm(0xffffff,6));a.renderOrder=6;ov.add(a);
   const s=new THREE.Points(new THREE.BufferGeometry().setFromPoints(sel),pm(0xffa726,9));s.renderOrder=7;ov.add(s)}
+ if(mode==="obj")selSet.forEach(q=>{if(q===o)return;const g=new THREE.LineSegments(new THREE.WireframeGeometry(q.mesh.geometry),new THREE.LineBasicMaterial({color:0xffa726,transparent:true,opacity:.85}));q.mesh.add(g);ovs.push(g)});
  o.mesh.add(ov);dirty=true}
 // gizmo
 const gizmo=new THREE.Group(),hits=[],ringHits=[],tips={};
@@ -160,28 +165,28 @@ AX.forEach((a,i)=>{const g=new THREE.Group(),mk=c=>new THREE.MeshBasicMaterial({
  if(i===0)g.rotation.z=-Math.PI/2;if(i===2)g.rotation.x=Math.PI/2;
  tips[i]={sh,cone,box,ball,hit,ring};hits.push(hit);ringHits.push(rhit);gizmo.add(g)});
 gizmo.visible=false;scene.add(gizmo);
-function center(){if(!selObj)return null;if(mode==="obj")return selObj.mesh.position.clone();
+function center(){if(!selObj)return null;if(mode==="obj"){const c=new V3();selSet.forEach(q=>c.add(q.mesh.position));return c.divideScalar(selSet.size||1)}
  if(!selV.size)return null;const c=new V3();selV.forEach(i=>c.add(selObj.mesh.localToWorld(selObj.verts[i].clone())));return c.divideScalar(selV.size)}
 function updGizmo(){const c=center();gizmo.visible=!!c;if(!c)return;gizmo.position.copy(c);
  if(!drag){gizmo.quaternion.identity();if(mode==="face"&&selObj){const n=new V3(),m=selObj.mesh,vs=selObj.verts;
   selObj.faces.forEach((f,i)=>{if(mode==="face"?selF.has(i):f.some(v=>selV.has(v))){const a=m.localToWorld(vs[f[0]].clone()),b=m.localToWorld(vs[f[1]].clone()),d=m.localToWorld(vs[f[2]].clone());n.add(b.sub(a).cross(d.sub(a)))}});
   if(n.lengthSq()>1e-12)gizmo.quaternion.setFromUnitVectors(new V3(0,1,0),n.normalize())}}
- gizmo.scale.setScalar(camera.position.distanceTo(c)*.17);gizmo.updateMatrixWorld(true);
+ gizmo.scale.setScalar((camera===ortho?dist:camera.position.distanceTo(c))*.17);gizmo.updateMatrixWorld(true);
  for(const k in tips){const t=tips[k],r=tool==="rot";t.sh.visible=t.hit.visible=!r;t.cone.visible=tool==="move";t.box.visible=tool==="scale";t.ball.visible=false;t.ring.visible=r}}
 // undo
 const hist=[];
-function ser(){return JSON.stringify({cam:[az,el,dist,target.toArray()],sel:objs.indexOf(selObj),o:objs.map(o=>({v:o.verts.map(v=>v.toArray()),f:o.faces,p:o.mesh.position.toArray(),q:o.mesh.quaternion.toArray(),s:o.mesh.scale.toArray(),c:o.mesh.material.color.getHex()}))})}
+function ser(){return JSON.stringify({cam:[az,el,dist,target.toArray(),camera===ortho?1:0],sel:objs.indexOf(selObj),o:objs.map(o=>({v:o.verts.map(v=>v.toArray()),f:o.faces,p:o.mesh.position.toArray(),q:o.mesh.quaternion.toArray(),s:o.mesh.scale.toArray(),c:o.mesh.material.color.getHex()}))})}
 const redoS=[];
 function updBtns(){$("undo").disabled=!hist.length;$("redo").disabled=!redoS.length}
 function snapshot(){hist.push(ser());redoS.length=0;if(hist.length>60)hist.shift();updBtns()}
 function undo(){const s=hist.pop();if(!s)return;redoS.push(ser());restore(JSON.parse(s));updBtns()}
 function redo(){const s=redoS.pop();if(!s)return;hist.push(ser());restore(JSON.parse(s));updBtns()}
 function restore(d){clearOv();objs.splice(0).forEach(o=>{scene.remove(o.mesh);o.mesh.geometry.dispose()});
- selObj=null;selV=new Set();selF=new Set();d.o.forEach(r=>addObj({verts:r.v.map(a=>new V3(...a)),faces:r.f},r.c,r));selObj=objs[d.sel]||null;sync()}
+ selObj=null;selV=new Set();selF=new Set();d.o.forEach(r=>addObj({verts:r.v.map(a=>new V3(...a)),faces:r.f},r.c,r));selObj=objs[d.sel]||null;selSet=selObj?new Set([selObj]):new Set();sync()}
 // stato UI
 function sync(){overlay();updBtns();updCtx();$("flat").disabled=!(mode==="face"&&selF.size>1);$("col").value="#"+(selObj?selObj.mesh.material.color.getHexString():"7aa2ff");
- $("hud").textContent=selObj?(mode==="obj"?"Oggetto selezionato":mode==="vert"?selV.size+" vertici":selF.size+" facce"):"Tocca un oggetto o aggiungi una forma";dirty=true}
-function setSel(o){if(o!==selObj){selV=new Set();selF=new Set()}selObj=o;sync()}
+ $("hud").textContent=selObj?(mode==="obj"?(selSet.size>1?selSet.size+" oggetti selezionati":"Oggetto selezionato"):mode==="vert"?selV.size+" vertici":selF.size+" facce"):"Tocca un oggetto o aggiungi una forma";dirty=true}
+function setSel(o){if(o!==selObj){selV=new Set();selF=new Set()}selObj=o;selSet=o?new Set([o]):new Set();sync()}
 // input
 const ray=new THREE.Raycaster(),P=new Map();let drag=null,orbit=null,pinch=null,tap=null;
 function ndc(e){const r=cv.getBoundingClientRect();return new THREE.Vector2((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1)}
@@ -196,7 +201,7 @@ cv.addEventListener("pointerdown",e=>{cv.setPointerCapture(e.pointerId);P.set(e.
     if(r>1e-6&&t.lengthSq()>1e-12){t.normalize();const p0=scr(hp),p1=scr(hp.clone().add(t)),tx=p1.x-p0.x,ty=p1.y-p0.y,Lt=Math.hypot(tx,ty);dx=tx/Lt;dy=ty/Lt;ppu=Lt*r;ok=Lt>.5}else ok=false}
    if(ok){snapshot();drag={id:e.pointerId,idx:h.object.userData.axis,ax,c,dx,dy,ppu,tot:0,done:0,lx:e.clientX,ly:e.clientY};return}}}
  orbit={id:e.pointerId,x:e.clientX,y:e.clientY};tap={x:e.clientX,y:e.clientY,t:Date.now(),ok:true};
- clearTimeout(lp);if(mode==="face"&&selObj){const ev={clientX:e.clientX,clientY:e.clientY};lp=setTimeout(()=>{if(tap&&tap.ok&&P.size===1){longPress(ev);tap.ok=false;orbit=null}},500)}});
+ clearTimeout(lp);if((mode==="face"&&selObj)||mode==="obj"){const ev={clientX:e.clientX,clientY:e.clientY};lp=setTimeout(()=>{if(tap&&tap.ok&&P.size===1){longPress(ev);tap.ok=false;orbit=null}},500)}});
 cv.addEventListener("pointermove",e=>{if(!P.has(e.pointerId))return;const old=P.get(e.pointerId);P.set(e.pointerId,{x:e.clientX,y:e.clientY});
  if(drag&&drag.id===e.pointerId){const dpx=(e.clientX-drag.lx)*drag.dx+(e.clientY-drag.ly)*drag.dy;drag.lx=e.clientX;drag.ly=e.clientY;
   let u=dpx/drag.ppu;drag.tot+=u;
@@ -213,8 +218,9 @@ cv.addEventListener("pointerup",endPtr);cv.addEventListener("pointercancel",endP
 function applyDrag(d){const o=selObj,m=o.mesh,ax=drag.ax,c=drag.c;
  if(mode==="obj"){
   if(tool==="move")m.position.addScaledVector(ax,d);
-  else if(tool==="rot")m.rotateOnWorldAxis(ax,d);
+  else if(tool==="rot"){if(selSet.size>1)m.position.sub(c).applyAxisAngle(ax,d).add(c);m.rotateOnWorldAxis(ax,d)}
   else{const k=["x","y","z"][drag.idx];m.scale[k]=Math.max(.05,m.scale[k]+d)}
+  selSet.forEach(q=>{if(q===o)return;const mm=q.mesh;if(tool==="move")mm.position.addScaledVector(ax,d);else if(tool==="rot"){mm.position.sub(c).applyAxisAngle(ax,d).add(c);mm.rotateOnWorldAxis(ax,d)}else{const k=["x","y","z"][drag.idx];mm.scale[k]=Math.max(.05,mm.scale[k]+d)}mm.updateMatrixWorld()});
   m.updateMatrixWorld();updGizmo();dirty=true;overlay();return}
  selV.forEach(i=>{const p=m.localToWorld(o.verts[i].clone());
   if(tool==="move")p.addScaledVector(ax,d);
@@ -222,10 +228,14 @@ function applyDrag(d){const o=selObj,m=o.mesh,ax=drag.ax,c=drag.c;
   else p.addScaledVector(ax,p.clone().sub(c).dot(ax)*d);
   o.verts[i].copy(m.worldToLocal(p))});
  rebuild(o);updGizmo()}
-function visibleV(w){const dir=w.clone().sub(camera.position),L=dir.length();ray.set(camera.position.clone(),dir.normalize());const h=ray.intersectObject(selObj.mesh,false)[0];return !h||h.distance>=L-(L*.004+.01)}
+function visibleV(w){let o,dir,L,tol;if(camera===ortho){dir=camera.getWorldDirection(new V3());L=100;o=w.clone().addScaledVector(dir,-L);tol=dist*.004+.01}else{dir=w.clone().sub(camera.position);L=dir.length();dir.normalize();o=camera.position.clone();tol=L*.004+.01}
+ ray.set(o,dir);const h=ray.intersectObject(selObj.mesh,false)[0];return !h||h.distance>=L-tol}
 let lastTap=null,lp=null,lastUp=null;
 function fw(i){const m=selObj.mesh,f=selObj.faces[i],v=selObj.verts,a=m.localToWorld(v[f[0]].clone()),b=m.localToWorld(v[f[1]].clone()),c=m.localToWorld(v[f[2]].clone());return{a,b,c,n:b.clone().sub(a).cross(c.clone().sub(a)).normalize()}}
-function longPress(ev){if(!selObj||mode!=="face")return;if(lastTap){clearTimeout(lastTap.id);lastTap=null}
+function longPress(ev){if(mode==="obj"){ray.setFromCamera(ndc(ev),camera);const h=ray.intersectObjects(objs.map(o=>o.mesh),false)[0];if(!h)return;const ho=h.object.userData.o;
+  if(selSet.has(ho)){selSet.delete(ho);if(selObj===ho)selObj=[...selSet].pop()||null}else{selSet.add(ho);selObj=ho}
+  try{navigator.vibrate&&navigator.vibrate(25)}catch(x){}sync();return}
+ if(!selObj||mode!=="face")return;if(lastTap){clearTimeout(lastTap.id);lastTap=null}
  ray.setFromCamera(ndc(ev),camera);const h=ray.intersectObject(selObj.mesh,false)[0];if(!h)return;selObj.mesh.updateMatrixWorld();
  const r=fw(h.faceIndex),s=new Set([h.faceIndex]);
  selObj.faces.forEach((_,i)=>{if(i===h.faceIndex)return;const q=fw(i);if(q.n.dot(r.n)>.999&&[q.a,q.b,q.c].every(p=>Math.abs(p.clone().sub(r.a).dot(r.n))<.01))s.add(i)});
@@ -240,13 +250,15 @@ function pick(e){const ev={clientX:e.clientX,clientY:e.clientY};
    if(vi>=0){document.querySelector('#modes [data-m="vert"]').click();selV=new Set([vi])}
    else{document.querySelector('#modes [data-m="face"]').click();selF=new Set([h.faceIndex]);selV=new Set();selF.forEach(i=>selObj.faces[i].forEach(v=>selV.add(v)))}
    sync()}return}
-  lastUp={t:n0,x:ev.clientX,y:ev.clientY};doPick(ev,false);return}
+  lastUp={t:n0,x:ev.clientX,y:ev.clientY};doPick(ev,e.ctrlKey||e.metaKey);return}
  if(e.ctrlKey||e.metaKey){doPick(ev,true);return}
  const n=Date.now();
  if(lastTap&&n-lastTap.t<320&&Math.hypot(ev.clientX-lastTap.x,ev.clientY-lastTap.y)<40){clearTimeout(lastTap.id);lastTap=null;if(isOutside(ev)){exitComp();return}doPick(ev,true);return}
  lastTap={t:n,x:ev.clientX,y:ev.clientY,id:setTimeout(()=>{lastTap=null;doPick(ev,false)},300)}}
 function doPick(e,dbl){const mt=multi||dbl;ray.setFromCamera(ndc(e),camera);const r=cv.getBoundingClientRect(),px=e.clientX-r.left,py=e.clientY-r.top;
- if(mode==="obj"||!selObj){const h=ray.intersectObjects(objs.map(o=>o.mesh),false)[0];setSel(h?h.object.userData.o:null);return}
+ if(mode==="obj"||!selObj){const h=ray.intersectObjects(objs.map(o=>o.mesh),false)[0],ho=h?h.object.userData.o:null;
+  if(mt&&mode==="obj"){if(ho){if(selSet.has(ho)){selSet.delete(ho);if(selObj===ho)selObj=[...selSet].pop()||null}else{selSet.add(ho);selObj=ho}selV=new Set();selF=new Set();sync()}return}
+  setSel(ho);return}
  if(mode==="vert"){let best=-1,bd=30;selObj.verts.forEach((v,i)=>{const w=selObj.mesh.localToWorld(v.clone()),s=scr(w),d=Math.hypot(s.x-px,s.y-py);if(d<bd&&visibleV(w)){bd=d;best=i}});
   if(best<0){selV=new Set();sync();return}
   if(mt){selV.has(best)?selV.delete(best):selV.add(best)}else selV=new Set([best]);sync();return}
@@ -255,21 +267,22 @@ function doPick(e,dbl){const mt=multi||dbl;ray.setFromCamera(ndc(e),camera);cons
  const fi=h.faceIndex;if(mt){selF.has(fi)?selF.delete(fi):selF.add(fi)}else selF=new Set([fi]);
  selV=new Set();selF.forEach(i=>selObj.faces[i].forEach(v=>selV.add(v)));sync()}
 // UI
-document.querySelectorAll("#modes button").forEach(b=>b.onclick=()=>{mode=b.dataset.m;selV=new Set();selF=new Set();
+document.querySelectorAll("#modes button").forEach(b=>b.onclick=()=>{mode=b.dataset.m;selV=new Set();selF=new Set();selSet=selObj?new Set([selObj]):new Set();
  document.querySelectorAll("#modes button").forEach(x=>x.classList.toggle("on",x===b));sync()});
 document.querySelectorAll("#tools button").forEach(b=>b.onclick=()=>{tool=b.dataset.t;document.querySelectorAll("#tools button").forEach(x=>x.classList.toggle("on",x===b));dirty=true});
 const sheet=$("sheet");Object.keys(SHAPES).forEach(n=>{const b=document.createElement("button");b.textContent=n;b.onclick=()=>{snapshot();const d=fromGeo(SHAPES[n]());
  const o=addObj(d,new THREE.Color().setHSL(Math.random(),.55,.62),{p:[(Math.random()-.5)*2,n==="Piano"?0:.6,(Math.random()-.5)*2],q:[0,0,0,1],s:[1,1,1]});
  sheet.classList.remove("show");mode="obj";document.querySelectorAll("#modes button").forEach(x=>x.classList.toggle("on",x.dataset.m==="obj"));selV=new Set();selF=new Set();setSel(o)};sheet.appendChild(b)});
 $("add").onclick=()=>sheet.classList.toggle("show");
-$("dup").onclick=()=>{if(!selObj)return;snapshot();const m=selObj.mesh,o=addObj({verts:selObj.verts.map(v=>v.clone()),faces:selObj.faces.map(f=>f.slice())},m.material.color.getHex(),{p:m.position.toArray(),q:m.quaternion.toArray(),s:m.scale.toArray()});o.mesh.position.x+=.6;setSel(o)};
+$("dup").onclick=()=>{if(!selObj)return;snapshot();const ns=new Set();let last=null;
+ (mode==="obj"?[...selSet]:[selObj]).forEach(s0=>{const m=s0.mesh,o=addObj({verts:s0.verts.map(v=>v.clone()),faces:s0.faces.map(f=>f.slice())},m.material.color.getHex(),{p:m.position.toArray(),q:m.quaternion.toArray(),s:m.scale.toArray()});o.mesh.position.x+=.6;ns.add(o);last=o});setSel(last);selSet=ns;sync()};
 $("del").onclick=()=>{if(!selObj)return;snapshot();
  if(mode==="face"&&selF.size){const o=selObj;o.faces=o.faces.filter((_,i)=>!selF.has(i));const used=[...new Set(o.faces.flat())].sort((a,b)=>a-b),map=new Map(used.map((v,i)=>[v,i]));
   o.verts=used.map(i=>o.verts[i]);o.faces=o.faces.map(f=>f.map(v=>map.get(v)));selF=new Set();selV=new Set();rebuild(o);sync();return}
- clearOv();scene.remove(selObj.mesh);objs.splice(objs.indexOf(selObj),1);selObj=null;selV=new Set();selF=new Set();sync()};
+ clearOv();(mode==="obj"?[...selSet]:[selObj]).forEach(q=>{scene.remove(q.mesh);objs.splice(objs.indexOf(q),1)});selObj=null;selSet=new Set();selV=new Set();selF=new Set();sync()};
 $("multi").onclick=e=>{multi=!multi;e.currentTarget.classList.toggle("on",multi)};
 $("snap").onclick=e=>{snap=!snap;e.currentTarget.classList.toggle("on",snap)};
-$("col").oninput=e=>{if(selObj){selObj.mesh.material.color.set(e.target.value);dirty=true}};
+$("col").oninput=e=>{if(selObj){[...(mode==="obj"?selSet:[selObj])].forEach(q=>q.mesh.material.color.set(e.target.value));dirty=true}};
 $("col").onpointerdown=()=>{if(selObj)snapshot()};
 $("undo").onclick=undo;$("redo").onclick=redo;$("flat").onclick=flatten;
 $("exp-btn").onclick=()=>{let t="",off=1;objs.forEach((o,n)=>{t+="o forma"+(n+1)+"\n";const m=o.mesh;m.updateMatrixWorld();
@@ -315,7 +328,7 @@ else try{claude.use("downloads").then(d=>{if(d){dlApi=d;$("glb-btn").hidden=fals
 const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}};
 const lsOk=LS.set("lp:t","1");
 function projects(){try{return JSON.parse(LS.get("lp:projects")||"{}")||{}}catch(e){return{}}}
-function loadData(s,cam){try{const d=JSON.parse(s);if(!d||!Array.isArray(d.o))return false;restore(d);if(cam&&d.cam){az=d.cam[0];el=d.cam[1];dist=d.cam[2];target.fromArray(d.cam[3]);updCam()}return true}catch(e){return false}}
+function loadData(s,cam){try{const d=JSON.parse(s);if(!d||!Array.isArray(d.o))return false;restore(d);if(cam&&d.cam){az=d.cam[0];el=d.cam[1];dist=d.cam[2];target.fromArray(d.cam[3]);if((d.cam[4]===1)!==(camera===ortho))toggleProj();else updCam()}return true}catch(e){return false}}
 function newScene(def){restore({o:[],sel:-1});if(def)addObj(fromGeo(SHAPES.Icosaedro()),0x7aa2ff,{p:[0,.7,0],q:[0,0,0,1],s:[1,1,1]});sync()}
 let saveAt=0;
 setInterval(()=>{if(saveAt&&Date.now()>saveAt){saveAt=0;LS.set("lp:current",ser())}},500);
@@ -341,7 +354,7 @@ $("pnew").onclick=e=>{const b=e.currentTarget;if(!nw){nw=true;b.textContent="Sic
  nw=false;b.textContent="Nuovo da zero";snapshot();newScene(false);$("pname").value="";$("proj").classList.remove("show")};
 const cur=LS.get("lp:current");if(!(cur&&loadData(cur,true)))newScene(true);
 function updCtx(){const s=!!selObj,comp=mode!=="obj";
- $("dup").hidden=!s||comp;$("del").hidden=!s;$("flat").hidden=!(mode==="face"&&selF.size>1);$("multi").hidden=!s||!comp;$("snap").hidden=!s;$("col").hidden=!s||comp;$("ext").hidden=$("seg").hidden=!(mode==="face"&&selF.size>0);$("tess").hidden=!(mode==="vert"&&selV.size>2);
+ $("dup").hidden=!s||comp;$("del").hidden=!s;$("flat").hidden=!(mode==="face"&&selF.size>1);$("multi").hidden=!s;$("snap").hidden=!s;$("align").hidden=!(mode==="obj"&&selSet.size>0);$("col").hidden=!s||comp;$("ext").hidden=$("seg").hidden=!(mode==="face"&&selF.size>0);$("tess").hidden=!(mode==="vert"&&selV.size>2);
  $("ext").classList.toggle("on",!$("ext").hidden&&extSig!==""&&extSig===selSig())}
 function vertAt(ev){if(!selObj)return -1;const r=cv.getBoundingClientRect(),px=ev.clientX-r.left,py=ev.clientY-r.top;let best=-1,bd=30;
  selObj.verts.forEach((v,i)=>{const w=selObj.mesh.localToWorld(v.clone()),s=scr(w),d=Math.hypot(s.x-px,s.y-py);if(d<bd&&visibleV(w)){bd=d;best=i}});return best}
@@ -381,16 +394,41 @@ function tessellate(){if(mode!=="vert"||!selObj||selV.size<3)return;const o=selO
  snapshot();add.forEach(f=>o.faces.push(f));rebuild(o);sync();$("hud").textContent=add.length+" facce create"}
 $("tess").onclick=tessellate;
 $("ext").onclick=extrude;$("seg").onclick=segment;
+function bb(o){const b=new THREE.Box3();o.mesh.updateMatrixWorld(true);o.verts.forEach(v=>b.expandByPoint(o.mesh.localToWorld(v.clone())));return b}
+function ctr(b,ax){return (b.min[ax]+b.max[ax])/2}
+function alignObjs(ax,how){if(mode!=="obj"||selSet.size<2)return;snapshot();const L=[...selSet],B=L.map(bb),all=new THREE.Box3();B.forEach(b=>all.union(b));
+ const pick1=b=>how==="min"?b.min[ax]:how==="max"?b.max[ax]:ctr(b,ax),t=pick1(all);
+ L.forEach((o,i)=>{o.mesh.position[ax]+=t-pick1(B[i]);o.mesh.updateMatrixWorld()});overlay();updGizmo();dirty=true}
+function distribute(ax){if(mode!=="obj"||selSet.size<3)return;snapshot();const L=[...selSet].map(o=>({o,b:bb(o)})).sort((p,q)=>ctr(p.b,ax)-ctr(q.b,ax));
+ const a=ctr(L[0].b,ax),z=ctr(L[L.length-1].b,ax);
+ L.forEach((it,i)=>{it.o.mesh.position[ax]+=a+(z-a)*i/(L.length-1)-ctr(it.b,ax);it.o.mesh.updateMatrixWorld()});overlay();updGizmo();dirty=true}
+function toGround(){if(mode!=="obj"||!selSet.size)return;snapshot();selSet.forEach(o=>{o.mesh.position.y-=bb(o).min.y;o.mesh.updateMatrixWorld()});overlay();updGizmo();dirty=true}
+const asheet=document.createElement("div");asheet.className="sheet";asheet.id="asheet";$("view").appendChild(asheet);
+function abtn(t,f,full){const b=document.createElement("button");b.textContent=t;if(full)b.style.gridColumn="1 / -1";b.onclick=()=>{f();asheet.classList.remove("show")};asheet.appendChild(b)}
+["x","y","z"].forEach(ax=>[["min","min"],["mid","centro"],["max","max"]].forEach(([h,t])=>abtn(ax.toUpperCase()+" "+t,()=>alignObjs(ax,h))));
+["x","y","z"].forEach(ax=>abtn("Distr. "+ax.toUpperCase(),()=>distribute(ax)));
+abtn("Appoggia a terra",toGround,true);
+$("align").onclick=()=>{$("sheet").classList.remove("show");asheet.classList.toggle("show")};
+let tw=null;
+function goView(a,e){const a0=az,e0=el;let da=a-a0;da=Math.atan2(Math.sin(da),Math.cos(da));const t0=performance.now();cancelAnimationFrame(tw);
+ const step=t=>{const k=Math.min(1,(t-t0)/220),s=k*k*(3-2*k);az=a0+da*s;el=e0+(e-e0)*s;updCam();if(k<1)tw=requestAnimationFrame(step)};tw=requestAnimationFrame(step)}
+function toggleProj(){const wasO=camera===ortho;camera=wasO?persp:ortho;$("projbtn").textContent=wasO?"Passa a ortogonale":"Passa a prospettiva";updCam()}
+function frameAll(){const b=new THREE.Box3();objs.forEach(o=>b.union(bb(o)));if(b.isEmpty())return;b.getCenter(target);const s=b.getSize(new V3());dist=Math.min(40,Math.max(3,Math.max(s.x,s.y,s.z)*1.8+1));updCam()}
+const VIEWS={front:[0,0],back:[Math.PI,0],left:[-Math.PI/2,0],right:[Math.PI/2,0],top:[0,Math.PI/2-1e-4],bottom:[0,-(Math.PI/2-1e-4)],iso:[Math.PI/4,.6155],init:[.8,.55]};
+document.querySelectorAll("#vmenu [data-v]").forEach(b=>b.onclick=()=>goView(...VIEWS[b.dataset.v]));
+$("projbtn").onclick=toggleProj;$("frameall").onclick=frameAll;
+$("vmenu").addEventListener("click",()=>$("vmenu").classList.remove("show"));
+$("view-btn").onclick=()=>{$("menu").classList.remove("show");$("vmenu").classList.toggle("show")};
 function exitComp(){selV=new Set();selF=new Set();document.querySelector('#modes [data-m="obj"]').click()}
 function isOutside(ev){ray.setFromCamera(ndc(ev),camera);if(ray.intersectObject(selObj.mesh,false)[0])return false;
  if(mode==="vert"){const r=cv.getBoundingClientRect(),px=ev.clientX-r.left,py=ev.clientY-r.top;
   for(let i=0;i<selObj.verts.length;i++){const w=selObj.mesh.localToWorld(selObj.verts[i].clone()),s=scr(w);if(Math.hypot(s.x-px,s.y-py)<30&&visibleV(w))return false}}
  return true}
-$("menu-btn").onclick=()=>$("menu").classList.toggle("show");
+$("menu-btn").onclick=()=>{$("vmenu").classList.remove("show");$("menu").classList.toggle("show")};
 $("menu").onclick=()=>$("menu").classList.remove("show");
-document.addEventListener("pointerdown",e=>{if(!e.target.closest("#menu,#menu-btn"))$("menu").classList.remove("show")});
+document.addEventListener("pointerdown",e=>{if(!e.target.closest("#menu,#menu-btn"))$("menu").classList.remove("show");if(!e.target.closest("#asheet,#align"))$("asheet").classList.remove("show");if(!e.target.closest("#vmenu,#view-btn"))$("vmenu").classList.remove("show")});
 // tastiera e mouse (desktop)
-function selAll(){if(!selObj||mode==="obj")return;selV=new Set(selObj.verts.map((_,i)=>i));selF=mode==="face"?new Set(selObj.faces.map((_,i)=>i)):new Set();sync()}
+function selAll(){if(mode==="obj"){if(!objs.length)return;selSet=new Set(objs);selObj=objs[objs.length-1];selV=new Set();selF=new Set();sync();return}if(!selObj)return;selV=new Set(selObj.verts.map((_,i)=>i));selF=mode==="face"?new Set(selObj.faces.map((_,i)=>i)):new Set();sync()}
 function openOv(){return document.querySelector("#proj.show,#exp.show,#help.show")}
 let spaceDown=false;
 window.addEventListener("keyup",e=>{if(e.key===" "){spaceDown=false;cv.style.cursor="";if(!(e.target&&/INPUT|TEXTAREA/.test(e.target.tagName)))e.preventDefault()}});
@@ -402,9 +440,12 @@ cv.addEventListener("wheel",e=>{e.preventDefault();zoomBy(Math.exp(e.deltaY*(e.d
 cv.addEventListener("contextmenu",e=>e.preventDefault());
 window.addEventListener("keydown",e=>{const tg=e.target&&e.target.tagName;if(tg==="INPUT"||tg==="TEXTAREA")return;
  const k=e.key.toLowerCase(),c=e.ctrlKey||e.metaKey,ov=openOv(),go=()=>e.preventDefault();
- if(k==="escape"){$("menu").classList.remove("show");if(ov)ov.classList.remove("show");else{selV=new Set();selF=new Set();if(mode==="obj")setSel(null);else sync()}return}
+ if(k==="escape"){$("menu").classList.remove("show");$("vmenu").classList.remove("show");if(ov)ov.classList.remove("show");else{selV=new Set();selF=new Set();if(mode==="obj")setSel(null);else sync()}return}
  if(ov)return;
  if(k===" "){go();if(!spaceDown){spaceDown=true;cv.style.cursor="grab"}return}
+ const NP={Numpad1:[0,0],Numpad3:[Math.PI/2,0],Numpad7:[0,Math.PI/2-1e-4]};
+ if(e.code==="Numpad5"){go();toggleProj();return}
+ if(NP[e.code]){go();let[a,b]=NP[e.code];if(c){a=a?-a:Math.PI;b=-b}goView(a,b);return}
  if(c){if(k==="z"&&!e.shiftKey){go();$("undo").click()}else if((k==="z"&&e.shiftKey)||k==="y"){go();$("redo").click()}else if(k==="d"){go();$("dup").click()}else if(k==="a"){go();selAll()}
   else if(k==="s"){go();const n=$("pname").value.trim();if(n){ow=n;$("psave").click()}else{$("proj-btn").click();$("pname").focus()}}return}
  if(e.altKey)return;
@@ -418,6 +459,7 @@ window.addEventListener("keydown",e=>{const tg=e.target&&e.target.tagName;if(tg=
  else if(k==="x"){go();$("ext").click()}
  else if(k==="s"){go();$("seg").click()}
  else if(k==="k"){go();$("tess").click()}
+ else if(k==="l"){go();$("align").click()}
  else if(k==="m"){go();$("multi").click()}
  else if(k==="t"){go();$("snap").click()}
  else if(k==="h"||e.key==="?"){go();$("help").classList.add("show")}
