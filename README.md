@@ -1,2 +1,2 @@
 # LPE
-LowPolyEditor
+Low Poly Editor
