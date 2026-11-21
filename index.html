@@ -46,6 +46,8 @@ button.on{background:var(--acc);color:var(--accfg);font-weight:700}
 #vmenu.show{display:grid}
 .mi{text-align:left;border-radius:8px;padding:11px 12px}
 .mi:active{background:var(--line)}
+#gsp{flex:none;min-width:48px;padding:11px 6px;font-size:12.5px}
+#modes button,#tools button{font-size:12.5px;padding:11px 2px}
 #stats{position:absolute;right:8px;top:8px;font-size:12px;color:var(--mut);pointer-events:none}
 #pgrid{grid-column:1/-1;display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
 #pgrid button{aspect-ratio:1;min-height:30px;padding:0;border:1px solid var(--line);border-radius:8px}
@@ -82,12 +84,12 @@ button:disabled{opacity:.4}
 <div id="menu"><button class="mi" id="proj-btn">Progetti…</button><button class="mi" id="m-save">Salva file progetto</button><button class="mi" id="m-import">Importa file…</button><button class="mi" id="exp-btn">Esporta OBJ</button><button class="mi" id="glb-btn" hidden>Esporta GLB (zip)</button><button class="mi" id="helpbtn">Comandi e aiuto</button></div>
 <div id="exp"><textarea id="objtxt" readonly></textarea><div class="row"><button class="act on" id="copy">Copia testo</button><button class="act" id="dlobj" hidden>Scarica .obj</button><button class="act" id="closeexp">Chiudi</button></div></div>
 <div id="proj"><div class="row"><input id="pname" placeholder="Nome progetto" maxlength="40"><button class="act on" id="psave">Salva</button></div><div id="plist"></div><div class="row"><button class="act" id="pnew">Nuovo da zero</button><button class="act" id="pclose">Chiudi</button></div></div>
-<div id="help"><div id="hbody"><h3>MOUSE</h3><p><b>Trascina</b>orbita</p><p><b>Centrale / Spazio</b>tieni premuto e trascina: sposta la vista</p><p><b>Destro / Maiusc</b>trascina: sposta la vista</p><p><b>Rotella</b>zoom</p><p><b>Doppio clic / Ctrl o Alt+clic</b>aggiungi o togli dalla selezione</p><p><b>Tieni premuto</b>su un oggetto: aggiungi o togli dalla selezione · su una faccia: facce complanari</p><p><b>Doppio clic</b>su un oggetto: vertice o faccia sotto il dito entra nella modalità relativa · nel vuoto: esci</p><h3>TASTIERA</h3><p><b>1 2 3</b>Oggetto, Facce, Vertici</p><p><b>W E R</b>Sposta, Ruota, Scala</p><p><b>Frecce</b>orbita</p><p><b>+ / -</b>zoom</p><p><b>F</b>centra sulla selezione</p><p><b>Numpad 1 / 3 / 7</b>vista fronte, destra, alto (con Ctrl: opposta)</p><p><b>Numpad 5</b>ortogonale o prospettiva</p><p><b>Ctrl+A</b>seleziona tutto</p><p><b>L</b>allinea gli oggetti</p><p><b>C</b>palette colori (tocca un colore per dipingere la selezione)</p><p><b>Esc</b>deseleziona o chiudi</p><p><b>Canc</b>elimina oggetto, facce o vertici selezionati</p><p><b>U</b>unisci al centro i vertici selezionati</p><p><b>J</b>unisci per distanza (vertici vicini)</p><p><b>N</b>inverti le normali</p><p><b>Ctrl+D</b>duplica</p><p><b>Ctrl+Z</b>annulla</p><p><b>Ctrl+Y</b>ripeti (anche Ctrl+Maiusc+Z)</p><p><b>Ctrl+S</b>salva il progetto</p><p><b>Maiusc+A</b>aggiungi forma</p><p><b>P</b>appiattisci le facce</p><p><b>X</b>estrudi le facce</p><p><b>S</b>segmenta (vertice al centro)</p><p><b>K</b>tassella i vertici selezionati</p><p><b>M</b>selezione multipla</p><p><b>T</b>snap on/off</p><p><b>H o ?</b>questo aiuto</p></div><div class="row"><button class="act on" id="hclose">Chiudi</button></div></div>
+<div id="help"><div id="hbody"><h3>MOUSE</h3><p><b>Trascina</b>orbita</p><p><b>Centrale / Spazio</b>tieni premuto e trascina: sposta la vista</p><p><b>Destro / Maiusc</b>trascina: sposta la vista</p><p><b>Rotella</b>zoom</p><p><b>Doppio clic / Ctrl o Alt+clic</b>aggiungi o togli dalla selezione</p><p><b>Tieni premuto</b>su un oggetto: aggiungi o togli dalla selezione · su una faccia: facce complanari</p><p><b>Doppio clic</b>su un oggetto: vertice o faccia sotto il dito entra nella modalità relativa · nel vuoto: esci</p><h3>TASTIERA</h3><p><b>1 2 3</b>Oggetto, Facce, Vertici</p><p><b>W E R</b>Sposta, Ruota, Scala</p><p><b>Frecce</b>orbita</p><p><b>+ / -</b>zoom</p><p><b>F</b>centra sulla selezione</p><p><b>Numpad 1 / 3 / 7</b>vista fronte, destra, alto (con Ctrl: opposta)</p><p><b>Numpad 5</b>ortogonale o prospettiva</p><p><b>Ctrl+A</b>seleziona tutto</p><p><b>L</b>allinea gli oggetti</p><p><b>C</b>palette colori (tocca un colore per dipingere la selezione)</p><p><b>Esc</b>deseleziona o chiudi</p><p><b>Canc</b>elimina oggetto, facce o vertici selezionati</p><p><b>U</b>unisci al centro i vertici selezionati</p><p><b>J</b>unisci per distanza (vertici vicini)</p><p><b>N</b>inverti le normali</p><p><b>G</b>assi del gizmo in Facce: della faccia (Loc) o del mondo (Glob)</p><p><b>Ctrl+D</b>duplica</p><p><b>Ctrl+Z</b>annulla</p><p><b>Ctrl+Y</b>ripeti (anche Ctrl+Maiusc+Z)</p><p><b>Ctrl+S</b>salva il progetto</p><p><b>Maiusc+A</b>aggiungi forma</p><p><b>P</b>appiattisci le facce</p><p><b>X</b>estrudi le facce</p><p><b>S</b>segmenta (vertice al centro)</p><p><b>K</b>tassella i vertici selezionati</p><p><b>M</b>selezione multipla</p><p><b>T</b>snap on/off</p><p><b>H o ?</b>questo aiuto</p></div><div class="row"><button class="act on" id="hclose">Chiudi</button></div></div>
 </div>
 <footer>
 <div class="row">
 <div class="seg" id="modes"><button data-m="obj" class="on">Oggetto</button><button data-m="face">Facce</button><button data-m="vert">Vertici</button></div>
-<div class="seg" id="tools"><button data-t="move" class="on">Sposta</button><button data-t="rot">Ruota</button><button data-t="scale">Scala</button></div>
+<div class="seg" id="tools"><button data-t="move" class="on">Sposta</button><button data-t="rot">Ruota</button><button data-t="scale">Scala</button></div><button class="act" id="gsp" title="Assi del gizmo: Loc = della faccia, Glob = del mondo" disabled>Glob</button>
 </div>
 <div id="acts">
 <button class="act" id="add">+ Forma</button><button class="act" id="ext" hidden>Estrudi</button><button class="act" id="seg" hidden>Segmenta</button><button class="act" id="tess" hidden>Tassella</button><button class="act" id="merge" hidden>Unisci</button><button class="act" id="weldn" hidden>Salda</button><button class="act" id="flip" hidden>Inverti</button>
@@ -200,7 +202,7 @@ function center(){if(!selObj)return null;if(mode==="obj"){const c=new V3();selSe
  if(!selV.size)return null;const c=new V3();selV.forEach(i=>c.add(selObj.mesh.localToWorld(selObj.verts[i].clone())));return c.divideScalar(selV.size)}
 var GPX=matchMedia("(pointer:fine)").matches?72:110;
 function updGizmo(){const c=center();gizmo.visible=!!c;if(!c)return;gizmo.position.copy(c);
- if(!drag){gizmo.quaternion.identity();if(mode==="face"&&selObj){const n=new V3(),m=selObj.mesh,vs=selObj.verts;
+ if(!drag){gizmo.quaternion.identity();if(mode==="face"&&gspace==="local"&&selObj){const n=new V3(),m=selObj.mesh,vs=selObj.verts;
   selObj.faces.forEach((f,i)=>{if(mode==="face"?selF.has(i):f.some(v=>selV.has(v))){const a=m.localToWorld(vs[f[0]].clone()),b=m.localToWorld(vs[f[1]].clone()),d=m.localToWorld(vs[f[2]].clone());n.add(b.sub(a).cross(d.sub(a)))}});
   if(n.lengthSq()>1e-12)gizmo.quaternion.setFromUnitVectors(new V3(0,1,0),n.normalize())}}
  gizmo.scale.setScalar(GPX*.9326*(camera===ortho?dist:camera.position.distanceTo(c))/(cv.clientHeight||600));gizmo.updateMatrixWorld(true);
@@ -257,6 +259,7 @@ function applyDrag(d){const o=selObj,m=o.mesh,ax=drag.ax,c=drag.c;
  selV.forEach(i=>{const p=m.localToWorld(o.verts[i].clone());
   if(tool==="move")p.addScaledVector(ax,d);
   else if(tool==="rot")p.sub(c).applyAxisAngle(ax,d).add(c);
+  else if(mode==="face"&&gspace==="local"&&drag.idx===1){const w=p.clone().sub(c),wn=ax.clone().multiplyScalar(w.dot(ax));p.copy(c).add(wn).add(w.sub(wn).multiplyScalar(1+d))}
   else p.addScaledVector(ax,p.clone().sub(c).dot(ax)*d);
   o.verts[i].copy(m.worldToLocal(p))});
  rebuild(o);updGizmo()}
@@ -388,7 +391,7 @@ $("pnew").onclick=e=>{const b=e.currentTarget;if(!nw){nw=true;b.textContent="Sic
  nw=false;b.textContent="Nuovo da zero";snapshot();newScene(false);$("pname").value="";$("proj").classList.remove("show")};
 const cur=LS.get("lp:current");if(!(cur&&loadData(cur,true)))newScene(true);
 function updCtx(){const s=!!selObj,comp=mode!=="obj";
- $("dup").hidden=!s||comp;$("add").hidden=mode!=="obj";$("del").hidden=!(s&&(mode==="obj"||(mode==="face"&&selF.size>0)||(mode==="vert"&&selV.size>0)));$("flat").hidden=!(mode==="face"&&selF.size>1);$("multi").hidden=!s;$("snap").hidden=!s;$("align").hidden=!(mode==="obj"&&selSet.size>0);$("pal").hidden=!(s&&(mode==="obj"||(mode==="face"&&selF.size>0)));if($("pal").hidden){const pp=$("psheet");if(pp)pp.classList.remove("show")}$("ext").hidden=$("seg").hidden=!(mode==="face"&&selF.size>0);$("tess").hidden=!(mode==="vert"&&selV.size>2);$("merge").hidden=!(s&&mode==="vert");$("weldn").hidden=true;if($("merge").hidden){const ms=$("msheet");if(ms)ms.classList.remove("show")}$("flip").hidden=!(s&&(mode==="obj"||(mode==="face"&&selF.size>0)));
+ $("dup").hidden=!s||comp;$("add").hidden=mode!=="obj";$("gsp").textContent=(mode==="face"&&gspace==="local")?"Loc":"Glob";$("gsp").disabled=mode!=="face";$("del").hidden=!(s&&(mode==="obj"||(mode==="face"&&selF.size>0)||(mode==="vert"&&selV.size>0)));$("flat").hidden=!(mode==="face"&&selF.size>1);$("multi").hidden=!s;$("snap").hidden=!s;$("align").hidden=!(mode==="obj"&&selSet.size>0);$("pal").hidden=!(s&&(mode==="obj"||(mode==="face"&&selF.size>0)));if($("pal").hidden){const pp=$("psheet");if(pp)pp.classList.remove("show")}$("ext").hidden=$("seg").hidden=!(mode==="face"&&selF.size>0);$("tess").hidden=!(mode==="vert"&&selV.size>2);$("merge").hidden=!(s&&mode==="vert");$("weldn").hidden=true;if($("merge").hidden){const ms=$("msheet");if(ms)ms.classList.remove("show")}$("flip").hidden=!(s&&(mode==="obj"||(mode==="face"&&selF.size>0)));
  $("ext").classList.toggle("on",!$("ext").hidden&&extSig!==""&&extSig===selSig())}
 function vertAt(ev){if(!selObj)return -1;const r=cv.getBoundingClientRect(),px=ev.clientX-r.left,py=ev.clientY-r.top;let best=-1,bd=30;
  selObj.verts.forEach((v,i)=>{const w=selObj.mesh.localToWorld(v.clone()),s=scr(w),d=Math.hypot(s.x-px,s.y-py);if(d<bd&&visibleV(w)){bd=d;best=i}});return best}
@@ -552,6 +555,8 @@ function mbtn(t,f){const b=document.createElement("button");b.textContent=t;b.on
 const mC=mbtn("Al centro",mergeSel);mbtn("Per distanza",weldNear);
 $("merge").onclick=()=>{mC.disabled=selV.size<2;$("sheet").classList.remove("show");$("asheet").classList.remove("show");const pp=$("psheet");if(pp)pp.classList.remove("show");msheet.classList.toggle("show")};$("weldn").onclick=weldNear;$("flip").onclick=flipSel;
 $("cullbtn").onclick=e=>{cull=!cull;objs.forEach(o=>{o.mesh.material.side=cull?THREE.FrontSide:THREE.DoubleSide;o.mesh.material.needsUpdate=true});e.currentTarget.textContent=cull?"Mostra entrambi i lati":"Mostra solo il fronte";dirty=true};
+var gspace="local";
+$("gsp").onclick=()=>{if(mode!=="face")return;gspace=gspace==="local"?"world":"local";$("gsp").textContent=gspace==="local"?"Loc":"Glob";dirty=true};
 function exitComp(){selV=new Set();selF=new Set();document.querySelector('#modes [data-m="obj"]').click()}
 function isOutside(ev){ray.setFromCamera(ndc(ev),camera);if(ray.intersectObject(selObj.mesh,false)[0])return false;
  if(mode==="vert"){const r=cv.getBoundingClientRect(),px=ev.clientX-r.left,py=ev.clientY-r.top;
@@ -597,6 +602,7 @@ window.addEventListener("keydown",e=>{const tg=e.target&&e.target.tagName;if(tg=
  else if(k==="u"){go();mergeSel()}
  else if(k==="j"){go();weldNear()}
  else if(k==="n"){go();$("flip").click()}
+ else if(k==="g"){go();$("gsp").click()}
  else if(k==="m"){go();$("multi").click()}
  else if(k==="t"){go();$("snap").click()}
  else if(k==="h"||e.key==="?"){go();$("help").classList.add("show")}
